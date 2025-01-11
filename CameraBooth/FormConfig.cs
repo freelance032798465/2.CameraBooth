@@ -13,11 +13,13 @@ namespace CameraBooth
 {
     public partial class FormConfig : Form
     {
-        public FormConfig()
+        public FormConfig(Form1 form1)
         {
             InitializeComponent();
+            this.form1 = form1;
         }
 
+        Form1 form1;
         ConfigManager configManager = new ConfigManager("../../config.config");
 
 
@@ -77,6 +79,28 @@ namespace CameraBooth
                     configManager.SaveConfig();
                 }
             }
+        }
+
+        private void btPathResult_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.Description = "Please select a folder.";
+                folderDialog.ShowNewFolderButton = true;
+
+                if (folderDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedFolder = folderDialog.SelectedPath;
+                    configManager.Set("PathOutputImage", selectedFolder);
+                    configManager.SaveConfig();
+                    form1.destinationDirectory = configManager.Get("PathOutputImage");
+                }
+            }
+        }
+
+        private void btBack_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

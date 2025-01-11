@@ -6,6 +6,11 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Text;
+using System.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
+using System.Collections.Generic;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Taskbar;
+using System.Diagnostics;
 
 namespace CameraBooth
 {
@@ -14,21 +19,45 @@ namespace CameraBooth
         public Form1()
         {
             InitializeComponent();
+
+            string pythonFilePath = Path.GetFullPath(@"../../pythonCamera/main.py");
+            if (File.Exists(pythonFilePath))
+            {
+                string pythonExePath = Path.GetFullPath(@"../../pythonCamera/.venv/Scripts/python.exe");
+
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = pythonExePath;
+                startInfo.Arguments = "\"" + pythonFilePath + "\"";
+                startInfo.WorkingDirectory = Path.GetDirectoryName(pythonFilePath);
+                startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                Process process = Process.Start(startInfo);
+            }
+            else
+            {
+                Console.WriteLine("Python script not found.");
+            }
         }
 
-        private TcpClient client;
-        private NetworkStream stream;
+        public TcpClient client;
+        public NetworkStream stream;
         private Timer tmSteam;
+        private Timer tmFormLoad;
         private Timer tmCountdown;
         private Timer tmWaitImagePython;
         ConfigManager configManager = new ConfigManager("../../config.config");
         private int countdownValue;
         private string serverAddress;
         private int port;
-        private int score = 0;
-        private string destinationDirectory;
+        private int score = 0;//clear
+        public string destinationDirectory;//clear
         private string sourceFilePath = @"../../pythonCamera/captured_image.jpg";
         private string destinationFilePath;
+        private bool flagNewFolder = true;//clear
+        public int numberBackground = 1;
+        public List<string> pathPhotos = new List<string>();//clear
+        public List<string> pathDrops = new List<string>();
+        public int countDrop = 0;
+        private bool flagBtStart = false;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -36,20 +65,17 @@ namespace CameraBooth
             port = Convert.ToInt32(configManager.Get("Port"));
             destinationDirectory = configManager.Get("PathOutputImage");
 
-            try
-            {
-                client = new TcpClient(serverAddress, port);
-                stream = client.GetStream();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error connecting to server: " + ex.Message);
-            }
+            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
+            pathDrops = Directory.GetFiles("../../resource/drop")
+                .Where(file => imageExtensions.Contains(Path.GetExtension(file).ToLower()))
+                .Select(file => Path.GetFullPath(file))
+                .OrderBy(fileName => fileName)
+                .ToList();
 
-            tmSteam = new Timer();
-            tmSteam.Interval = 50;
-            tmSteam.Tick += tmSteam_Tick;
-            tmSteam.Start();
+            tmFormLoad = new Timer();
+            tmFormLoad.Interval = 3500;
+            tmFormLoad.Tick += tmFormLoad_Tick;
+            tmFormLoad.Start();
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -65,6 +91,7 @@ namespace CameraBooth
         private void btStart_Click(object sender, EventArgs e)
         {
             btStart.Visible = false;
+            lbScore.Visible = true;
             try
             {
                 tmCountdown.Dispose();
@@ -82,13 +109,10 @@ namespace CameraBooth
         }
         private void btContinue_Click(object sender, EventArgs e)
         {
-            if (score == 6)
+            pathPhotos.Add(destinationFilePath);
+            if (score == 3)
             {
-                this.Hide();
-                FormSum FormSum = new FormSum();
-                FormSum.ShowDialog();
-                this.Show();
-                this.Close();
+                processSelectBackground();
                 return;
             }
 
@@ -97,14 +121,6 @@ namespace CameraBooth
             btDelete.Visible = false;
             tmSteam.Start();
         }
-        private void btBackgroundLeft_Click(object sender, EventArgs e)
-        {
-            sendCommand("background2");
-        }
-        private void btBackgroundRight_Click(object sender, EventArgs e)
-        {
-            sendCommand("background3");
-        }
         private void btDelete_Click(object sender, EventArgs e)
         {
             btContinue.Visible = false;
@@ -112,13 +128,13 @@ namespace CameraBooth
             btDelete.Visible = false;
             File.Delete(destinationFilePath);
             score--;
-            lbScore.Text = $"{score}/6";
+            lbScore.Text = $"{score}/3";
             tmSteam.Start();
         }
         private void btConfig_Click(object sender, EventArgs e)
         {
             this.Hide();
-            FormConfig FormConfig = new FormConfig();
+            FormConfig FormConfig = new FormConfig(this);
             FormConfig.ShowDialog();
             this.Show();
         }
@@ -144,41 +160,31 @@ namespace CameraBooth
 
 
 
+        private void tmFormLoad_Tick(object sender, EventArgs e)
+        {
+            tmFormLoad.Stop();
+            try
+            {
+                client = new TcpClient(serverAddress, port);
+                stream = client.GetStream();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error connecting to server: " + ex.Message);
+            }
+
+            tmSteam = new Timer();
+            tmSteam.Interval = 50;
+            tmSteam.Tick += tmSteam_Tick;
+            tmSteam.Start();
+        }
         private void tmSteam_Tick(object sender, EventArgs e)
         {
-            if (client != null && client.Connected)
+            getImageCommand("getFrame");
+            if (!flagBtStart)
             {
-                string message = "getFrame";
-                byte[] data = Encoding.UTF8.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-
-                byte[] sizeInfo = new byte[4];
-                while (true)
-                {
-                    int bytesRead = stream.Read(sizeInfo, 0, sizeInfo.Length);
-                    if (bytesRead == 0)
-                        break;
-
-                    int dataSize = BitConverter.ToInt32(sizeInfo, 0);
-                    byte[] data2 = new byte[dataSize];
-                    int totalBytesRead = 0;
-                    while (totalBytesRead < dataSize)
-                    {
-                        bytesRead = stream.Read(data2, totalBytesRead, dataSize - totalBytesRead);
-                        totalBytesRead += bytesRead;
-                    }
-
-                    using (MemoryStream ms = new MemoryStream(data2))
-                    {
-                        Image image = Image.FromStream(ms);
-                        pbImage.Image = image;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Client is not connected to server!");
+                flagBtStart = true;
+                btStart.Visible = true;
             }
         }
         private void tmWaitImagePython_Tick(object sender, EventArgs e)
@@ -188,6 +194,31 @@ namespace CameraBooth
                 if (!Directory.Exists(destinationDirectory))
                 {
                     Directory.CreateDirectory(destinationDirectory);
+                }
+
+                if (flagNewFolder)
+                {
+                    string[] existingDirectories = Directory.GetDirectories(destinationDirectory);
+                    string currentDate = DateTime.Now.ToString("yyyyMMdd");
+
+                    var folderNumbers = existingDirectories
+                        .Select(dir => Path.GetFileName(dir))
+                        .Where(name => name.StartsWith(currentDate))
+                        .Select(name =>
+                        {
+                            var parts = name.Split('_');
+                            return parts.Length == 2 && int.TryParse(parts[1], out int number) ? number : (int?)null;
+                        })
+                        .Where(number => number.HasValue)
+                        .Select(number => number.Value)
+                        .ToList();
+
+                    int nextFolderNumber = folderNumbers.Any() ? folderNumbers.Max() + 1 : 1;
+                    string newFolderName = $"{currentDate}_{nextFolderNumber}";
+                    string newFolderPath = Path.Combine(destinationDirectory, newFolderName);
+                    Directory.CreateDirectory(newFolderPath);
+                    destinationDirectory = newFolderPath;
+                    flagNewFolder = false;
                 }
 
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
@@ -200,7 +231,9 @@ namespace CameraBooth
                     tmSteam.Stop();
                     using (var stream = new MemoryStream(File.ReadAllBytes(destinationFilePath)))
                     {
-                        pbImage.Image = Image.FromStream(stream);
+                        Image image = Image.FromStream(stream);
+                        image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        pbImage.Image = image;
                     }
                     processAfterCapture();
                 }
@@ -223,7 +256,7 @@ namespace CameraBooth
                 if (client != null && client.Connected)
                 {
                     string message = "capture";
-                    byte[] data = Encoding.UTF8.GetBytes(message);
+                    byte[] data = Encoding.UTF8.GetBytes($"*cmd={message}");
                     stream.Write(data, 0, data.Length);
 
                     data = new byte[1024];
@@ -246,11 +279,11 @@ namespace CameraBooth
 
 
 
-        private string sendCommand(string message)
+        public string sendCommand(string message)
         {
             if (client != null && client.Connected)
             {
-                byte[] data = Encoding.UTF8.GetBytes(message);
+                byte[] data = Encoding.UTF8.GetBytes($"*cmd={message}");
                 stream.Write(data, 0, data.Length);
 
                 data = new byte[1024];
@@ -263,12 +296,66 @@ namespace CameraBooth
                 return "Client is not connected to server!";
             }
         }
+        public void getImageCommand(string message)
+        {
+            if (client != null && client.Connected)
+            {
+                byte[] data = Encoding.UTF8.GetBytes($"*cmd={message}");
+                stream.Write(data, 0, data.Length);
+
+                byte[] sizeInfo = new byte[4];
+                while (true)
+                {
+                    int bytesRead = stream.Read(sizeInfo, 0, sizeInfo.Length);
+                    if (bytesRead == 0)
+                        break;
+
+                    int dataSize = BitConverter.ToInt32(sizeInfo, 0);
+                    byte[] data2 = new byte[dataSize];
+                    int totalBytesRead = 0;
+                    while (totalBytesRead < dataSize)
+                    {
+                        bytesRead = stream.Read(data2, totalBytesRead, dataSize - totalBytesRead);
+                        totalBytesRead += bytesRead;
+                    }
+
+                    using (MemoryStream ms = new MemoryStream(data2))
+                    {
+                        Image image = Image.FromStream(ms);
+                        pbImage.Image = image;
+                        lbOpenCamera.Visible = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Client is not connected to server!");
+            }
+        }
         private void processAfterCapture()
         {
             btContinue.Visible = true;
             btDelete.Visible = true;
             score++;
-            lbScore.Text = $"{score}/6";
+            lbScore.Text = $"{score}/3";
+        }
+        private void processSelectBackground()
+        {
+            this.Hide();
+            FormPreview FormPreview = new FormPreview(this);
+            FormPreview.ShowDialog();
+            this.Show();
+            score = 0;
+            destinationDirectory = configManager.Get("PathOutputImage");
+            flagNewFolder = true;
+            pathPhotos.Clear();
+            btContinue.Visible= false;
+            btDelete.Visible= false;
+            lbScore.Visible= false;
+            btStart.Visible = true;
+            lbScore.Text = "0/3";
+            tmSteam.Start();
         }
     }
 }

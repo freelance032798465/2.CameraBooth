@@ -15,9 +15,12 @@ print(f"Server listening on {host}:{port}...")
 client_socket, client_address = server_socket.accept()
 print(f"Connection from {client_address} has been established!")
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 if not cap.isOpened():
-    print("ไม่สามารถเปิดกล้องได้")
+    cap = cv2.VideoCapture(0)
+
+if not cap.isOpened():
+    print("Unable to open camera")
     exit()
 
 text = "background1"

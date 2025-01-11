@@ -31,13 +31,11 @@
             this.btStart = new System.Windows.Forms.Button();
             this.lbStartCapture = new System.Windows.Forms.Label();
             this.btDelete = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.btContinue = new System.Windows.Forms.Button();
             this.lbScore = new System.Windows.Forms.Label();
-            this.btBackgroundRight = new System.Windows.Forms.Panel();
-            this.btBackgroundLeft = new System.Windows.Forms.Panel();
             this.btConfig = new System.Windows.Forms.Panel();
             this.pbImage = new System.Windows.Forms.PictureBox();
+            this.lbOpenCamera = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,12 +45,13 @@
             this.btStart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.btStart.ForeColor = System.Drawing.Color.White;
-            this.btStart.Location = new System.Drawing.Point(340, 12);
+            this.btStart.Location = new System.Drawing.Point(503, 12);
             this.btStart.Name = "btStart";
             this.btStart.Size = new System.Drawing.Size(171, 75);
             this.btStart.TabIndex = 3;
             this.btStart.Text = "Start Capture";
             this.btStart.UseVisualStyleBackColor = false;
+            this.btStart.Visible = false;
             this.btStart.Click += new System.EventHandler(this.btStart_Click);
             // 
             // lbStartCapture
@@ -60,7 +59,7 @@
             this.lbStartCapture.AutoSize = true;
             this.lbStartCapture.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.lbStartCapture.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lbStartCapture.Location = new System.Drawing.Point(655, 235);
+            this.lbStartCapture.Location = new System.Drawing.Point(948, 346);
             this.lbStartCapture.Name = "lbStartCapture";
             this.lbStartCapture.Size = new System.Drawing.Size(99, 108);
             this.lbStartCapture.TabIndex = 6;
@@ -73,7 +72,7 @@
             this.btDelete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.btDelete.ForeColor = System.Drawing.Color.White;
-            this.btDelete.Location = new System.Drawing.Point(596, 12);
+            this.btDelete.Location = new System.Drawing.Point(901, 12);
             this.btDelete.Name = "btDelete";
             this.btDelete.Size = new System.Drawing.Size(171, 75);
             this.btDelete.TabIndex = 7;
@@ -82,24 +81,13 @@
             this.btDelete.Visible = false;
             this.btDelete.Click += new System.EventHandler(this.btDelete_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.label1.Location = new System.Drawing.Point(341, 492);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(169, 31);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Background";
-            // 
             // btContinue
             // 
             this.btContinue.BackColor = System.Drawing.Color.Lime;
             this.btContinue.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btContinue.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.btContinue.ForeColor = System.Drawing.Color.White;
-            this.btContinue.Location = new System.Drawing.Point(340, 12);
+            this.btContinue.Location = new System.Drawing.Point(503, 12);
             this.btContinue.Name = "btContinue";
             this.btContinue.Size = new System.Drawing.Size(171, 75);
             this.btContinue.TabIndex = 11;
@@ -113,35 +101,12 @@
             this.lbScore.AutoSize = true;
             this.lbScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.lbScore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lbScore.Location = new System.Drawing.Point(12, 235);
+            this.lbScore.Location = new System.Drawing.Point(35, 346);
             this.lbScore.Name = "lbScore";
             this.lbScore.Size = new System.Drawing.Size(181, 108);
             this.lbScore.TabIndex = 12;
-            this.lbScore.Text = "0/6";
-            // 
-            // btBackgroundRight
-            // 
-            this.btBackgroundRight.BackgroundImage = global::CameraBooth.Properties.Resources.right_arrow;
-            this.btBackgroundRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btBackgroundRight.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btBackgroundRight.Location = new System.Drawing.Point(574, 487);
-            this.btBackgroundRight.Name = "btBackgroundRight";
-            this.btBackgroundRight.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btBackgroundRight.Size = new System.Drawing.Size(48, 44);
-            this.btBackgroundRight.TabIndex = 15;
-            this.btBackgroundRight.Click += new System.EventHandler(this.btBackgroundRight_Click);
-            // 
-            // btBackgroundLeft
-            // 
-            this.btBackgroundLeft.BackgroundImage = global::CameraBooth.Properties.Resources.left_arrow;
-            this.btBackgroundLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btBackgroundLeft.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btBackgroundLeft.Location = new System.Drawing.Point(228, 487);
-            this.btBackgroundLeft.Name = "btBackgroundLeft";
-            this.btBackgroundLeft.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btBackgroundLeft.Size = new System.Drawing.Size(48, 44);
-            this.btBackgroundLeft.TabIndex = 14;
-            this.btBackgroundLeft.Click += new System.EventHandler(this.btBackgroundLeft_Click);
+            this.lbScore.Text = "0/3";
+            this.lbScore.Visible = false;
             // 
             // btConfig
             // 
@@ -158,24 +123,34 @@
             // 
             // pbImage
             // 
-            this.pbImage.Location = new System.Drawing.Point(218, 131);
+            this.pbImage.Location = new System.Drawing.Point(256, 99);
             this.pbImage.Name = "pbImage";
-            this.pbImage.Size = new System.Drawing.Size(416, 309);
+            this.pbImage.Size = new System.Drawing.Size(650, 650);
             this.pbImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbImage.TabIndex = 0;
             this.pbImage.TabStop = false;
+            // 
+            // lbOpenCamera
+            // 
+            this.lbOpenCamera.AutoSize = true;
+            this.lbOpenCamera.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbOpenCamera.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.lbOpenCamera.Location = new System.Drawing.Point(481, 344);
+            this.lbOpenCamera.Name = "lbOpenCamera";
+            this.lbOpenCamera.Size = new System.Drawing.Size(247, 110);
+            this.lbOpenCamera.TabIndex = 16;
+            this.lbOpenCamera.Text = "opening\r\ncamera ...";
+            this.lbOpenCamera.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(779, 543);
-            this.Controls.Add(this.btBackgroundRight);
-            this.Controls.Add(this.btBackgroundLeft);
+            this.ClientSize = new System.Drawing.Size(1084, 761);
+            this.Controls.Add(this.lbOpenCamera);
             this.Controls.Add(this.btConfig);
             this.Controls.Add(this.lbScore);
             this.Controls.Add(this.btContinue);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.btDelete);
             this.Controls.Add(this.lbStartCapture);
             this.Controls.Add(this.btStart);
@@ -199,12 +174,10 @@
         private System.Windows.Forms.Button btStart;
         private System.Windows.Forms.Label lbStartCapture;
         private System.Windows.Forms.Button btDelete;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btContinue;
         private System.Windows.Forms.Label lbScore;
         private System.Windows.Forms.Panel btConfig;
-        private System.Windows.Forms.Panel btBackgroundLeft;
-        private System.Windows.Forms.Panel btBackgroundRight;
+        private System.Windows.Forms.Label lbOpenCamera;
     }
 }
 

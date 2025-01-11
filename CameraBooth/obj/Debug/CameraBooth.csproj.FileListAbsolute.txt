@@ -63,3 +63,4 @@ D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.exe
 D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.pdb
 D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormConfig.resources
 D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormSum.resources
+D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormPreview.resources

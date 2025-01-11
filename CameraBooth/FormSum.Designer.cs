@@ -28,26 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.btBack = new System.Windows.Forms.Panel();
+            this.btQRcode = new System.Windows.Forms.Panel();
             this.pbSum = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbSum)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel1
+            // btBack
             // 
-            this.panel1.BackgroundImage = global::CameraBooth.Properties.Resources.qr_code;
-            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panel1.Location = new System.Drawing.Point(378, 12);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(61, 58);
-            this.panel1.TabIndex = 1;
+            this.btBack.BackgroundImage = global::CameraBooth.Properties.Resources.reply;
+            this.btBack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btBack.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btBack.Location = new System.Drawing.Point(12, 12);
+            this.btBack.Name = "btBack";
+            this.btBack.Size = new System.Drawing.Size(61, 58);
+            this.btBack.TabIndex = 2;
+            this.btBack.Click += new System.EventHandler(this.btBack_Click);
+            // 
+            // btQRcode
+            // 
+            this.btQRcode.BackgroundImage = global::CameraBooth.Properties.Resources.qr_code;
+            this.btQRcode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btQRcode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btQRcode.Location = new System.Drawing.Point(511, 12);
+            this.btQRcode.Name = "btQRcode";
+            this.btQRcode.Size = new System.Drawing.Size(61, 58);
+            this.btQRcode.TabIndex = 1;
+            this.btQRcode.Visible = false;
+            this.btQRcode.Click += new System.EventHandler(this.btQRcode_Click);
             // 
             // pbSum
             // 
             this.pbSum.Location = new System.Drawing.Point(12, 76);
             this.pbSum.Name = "pbSum";
-            this.pbSum.Size = new System.Drawing.Size(427, 657);
+            this.pbSum.Size = new System.Drawing.Size(560, 873);
             this.pbSum.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbSum.TabIndex = 0;
             this.pbSum.TabStop = false;
@@ -56,15 +70,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(449, 745);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(584, 961);
+            this.Controls.Add(this.btBack);
+            this.Controls.Add(this.btQRcode);
             this.Controls.Add(this.pbSum);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "FormSum";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FormSum";
+            this.Text = "FormPrinting";
             this.Load += new System.EventHandler(this.FormSum_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbSum)).EndInit();
             this.ResumeLayout(false);
@@ -74,6 +89,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pbSum;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel btQRcode;
+        private System.Windows.Forms.Panel btBack;
     }
 }
