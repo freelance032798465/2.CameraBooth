@@ -20,17 +20,16 @@ namespace CameraBooth
         }
 
         Form1 form1;
-        ConfigManager configManager = new ConfigManager("../../config.config");
 
 
 
         private void FormConfig_Load(object sender, EventArgs e)
         {
-            using (var stream = new MemoryStream(File.ReadAllBytes(configManager.Get("PathBackground"))))
+            using (var stream = new MemoryStream(File.ReadAllBytes(form1.configManager.Get("PathBackground"))))
             {
                 pbBackground.Image = Image.FromStream(stream);
             }
-            using (var stream = new MemoryStream(File.ReadAllBytes(configManager.Get("PathEffect"))))
+            using (var stream = new MemoryStream(File.ReadAllBytes(form1.configManager.Get("PathEffect"))))
             {
                 pbEffect.Image = Image.FromStream(stream);
             }
@@ -54,8 +53,8 @@ namespace CameraBooth
                     {
                         pbBackground.Image = Image.FromStream(stream);
                     }
-                    configManager.Set("PathBackground", openFileDialog.FileName);
-                    configManager.SaveConfig();
+                    form1.configManager.Set("PathBackground", openFileDialog.FileName);
+                    form1.configManager.SaveConfig();
                 }
             }
         }
@@ -75,8 +74,8 @@ namespace CameraBooth
                     {
                         pbEffect.Image = Image.FromStream(stream);
                     }
-                    configManager.Set("PathEffect", openFileDialog.FileName);
-                    configManager.SaveConfig();
+                    form1.configManager.Set("PathEffect", openFileDialog.FileName);
+                    form1.configManager.SaveConfig();
                 }
             }
         }
@@ -91,9 +90,10 @@ namespace CameraBooth
                 if (folderDialog.ShowDialog() == DialogResult.OK)
                 {
                     string selectedFolder = folderDialog.SelectedPath;
-                    configManager.Set("PathOutputImage", selectedFolder);
-                    configManager.SaveConfig();
-                    form1.destinationDirectory = configManager.Get("PathOutputImage");
+                    form1.configManager.Set("PathOutputImage", selectedFolder);
+                    form1.configManager.SaveConfig();
+                    form1.destinationDirectory = form1.configManager.Get("PathOutputImage");
+                    form1.flagNewFolder = true;
                 }
             }
         }

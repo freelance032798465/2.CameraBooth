@@ -44,7 +44,7 @@ namespace CameraBooth
         private Timer tmFormLoad;
         private Timer tmCountdown;
         private Timer tmWaitImagePython;
-        ConfigManager configManager = new ConfigManager("../../config.config");
+        public ConfigManager configManager = new ConfigManager("../../config.config");
         private int countdownValue;
         private string serverAddress;
         private int port;
@@ -52,7 +52,7 @@ namespace CameraBooth
         public string destinationDirectory;//clear
         private string sourceFilePath = @"../../pythonCamera/captured_image.jpg";
         private string destinationFilePath;
-        private bool flagNewFolder = true;//clear
+        public bool flagNewFolder = true;//clear
         public int numberBackground = 1;
         public List<string> pathPhotos = new List<string>();//clear
         public List<string> pathDrops = new List<string>();

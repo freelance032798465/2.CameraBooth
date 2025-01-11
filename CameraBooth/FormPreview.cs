@@ -23,7 +23,6 @@ namespace CameraBooth
         private Timer tmFormLoad;
         private Timer tmWaitResult;
         private Timer tmToPrinting;
-        ConfigManager configManager = new ConfigManager("../../config.config");
 
         private void FormPreview_Load(object sender, EventArgs e)
         {
@@ -102,7 +101,7 @@ namespace CameraBooth
         {
             form1.sendCommand($"assemble,{form1.destinationDirectory},{Path.GetFileName(form1.pathPhotos[0])}," +
                 $"{Path.GetFileName(form1.pathPhotos[1])},{Path.GetFileName(form1.pathPhotos[2])}," +
-                $"{form1.pathDrops[form1.countDrop]},{configManager.Get("PathBackground")}");
+                $"{form1.pathDrops[form1.countDrop]},{form1.configManager.Get("PathBackground")}");
 
             tmWaitResult = new Timer();
             tmWaitResult.Interval = 100;

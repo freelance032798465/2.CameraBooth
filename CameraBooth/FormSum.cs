@@ -23,7 +23,6 @@ namespace CameraBooth
 
         Form1 form1;
         private Timer tmQrcode;
-        ConfigManager configManager = new ConfigManager("../../config.config");
 
 
 

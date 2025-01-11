@@ -8,7 +8,7 @@ using System.IO;
 
 namespace CameraBooth
 {
-    internal class ConfigManager
+    public class ConfigManager
     {
         private string configFilePath;
         private Dictionary<string, string> configData;
