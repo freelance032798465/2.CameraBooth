@@ -7,10 +7,10 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Text;
 using System.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 using System.Collections.Generic;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Taskbar;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CameraBooth
 {
@@ -40,10 +40,10 @@ namespace CameraBooth
 
         public TcpClient client;
         public NetworkStream stream;
-        private Timer tmSteam;
-        private Timer tmFormLoad;
-        private Timer tmCountdown;
-        private Timer tmWaitImagePython;
+        private System.Windows.Forms.Timer tmSteam;
+        private System.Windows.Forms.Timer tmFormLoad;
+        private System.Windows.Forms.Timer tmCountdown;
+        private System.Windows.Forms.Timer tmWaitImagePython;
         public ConfigManager configManager = new ConfigManager("../../config.config");
         private int countdownValue;
         private string serverAddress;
@@ -72,8 +72,8 @@ namespace CameraBooth
                 .OrderBy(fileName => fileName)
                 .ToList();
 
-            tmFormLoad = new Timer();
-            tmFormLoad.Interval = 3500;
+            tmFormLoad = new System.Windows.Forms.Timer();
+            tmFormLoad.Interval = 500;
             tmFormLoad.Tick += tmFormLoad_Tick;
             tmFormLoad.Start();
         }
@@ -98,7 +98,7 @@ namespace CameraBooth
             }
             catch { }
 
-            tmCountdown = new Timer();
+            tmCountdown = new System.Windows.Forms.Timer();
             tmCountdown.Interval = 1000;
             tmCountdown.Tick += tmCountdown_Tick;
 
@@ -160,20 +160,12 @@ namespace CameraBooth
 
 
 
-        private void tmFormLoad_Tick(object sender, EventArgs e)
+        private async void tmFormLoad_Tick(object sender, EventArgs e)
         {
             tmFormLoad.Stop();
-            try
-            {
-                client = new TcpClient(serverAddress, port);
-                stream = client.GetStream();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error connecting to server: " + ex.Message);
-            }
+            await ConnectToServerAsync("127.0.0.1", 12345, 10000);
 
-            tmSteam = new Timer();
+            tmSteam = new System.Windows.Forms.Timer();
             tmSteam.Interval = 50;
             tmSteam.Tick += tmSteam_Tick;
             tmSteam.Start();
@@ -263,7 +255,7 @@ namespace CameraBooth
                     int bytes = stream.Read(data, 0, data.Length);
                     string response = Encoding.UTF8.GetString(data, 0, bytes);
 
-                    tmWaitImagePython = new Timer();
+                    tmWaitImagePython = new System.Windows.Forms.Timer();
                     tmWaitImagePython.Interval = 200;
                     tmWaitImagePython.Tick += tmWaitImagePython_Tick;
                     tmWaitImagePython.Start();
@@ -357,5 +349,39 @@ namespace CameraBooth
             lbScore.Text = "0/3";
             tmSteam.Start();
         }
+        public async Task ConnectToServerAsync(string serverAddress, int port, int timeoutMilliseconds)
+        {
+            DateTime startTime = DateTime.Now;
+            bool isConnected = false;
+
+            while ((DateTime.Now - startTime).TotalMilliseconds < timeoutMilliseconds)
+            {
+                try
+                {
+                    client = new TcpClient();
+                    await client.ConnectAsync(serverAddress, port);
+
+                    // หากการเชื่อมต่อสำเร็จ
+                    stream = client.GetStream();
+                    isConnected = true;
+                    break;
+                }
+                catch (SocketException)
+                {
+                    await Task.Delay(500);
+                }
+            }
+
+            if (!isConnected)
+            {
+                MessageBox.Show("Error: Unable to connect to server within the specified timeout.");
+            }
+        }
+
+
+
+
+
+
     }
 }

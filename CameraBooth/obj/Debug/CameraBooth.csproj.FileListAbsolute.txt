@@ -64,3 +64,16 @@ D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.pdb
 D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormConfig.resources
 D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormSum.resources
 D:\Server Svn\Freelance\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormPreview.resources
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\bin\Debug\CameraBooth.exe.config
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\bin\Debug\CameraBooth.exe
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\bin\Debug\CameraBooth.pdb
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.Form1.resources
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormConfig.resources
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormPreview.resources
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.FormSum.resources
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.Properties.Resources.resources
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.csproj.GenerateResource.cache
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.exe
+C:\Users\User\Desktop\2.CameraBooth\CameraBooth\obj\Debug\CameraBooth.pdb
