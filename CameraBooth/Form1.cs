@@ -36,6 +36,27 @@ namespace CameraBooth
             {
                 Console.WriteLine("Python script not found.");
             }
+
+            try
+            {
+                File.ReadAllBytes(configManager.Get("PathBackground"));
+            }
+            catch
+            {
+                string openFileDialog = Path.GetFullPath(@"../../resource/background/bg.png");
+                configManager.Set("PathBackground", openFileDialog);
+                configManager.SaveConfig();
+            }
+            try
+            {
+                File.ReadAllBytes(configManager.Get("PathEffect"));
+            }
+            catch
+            {
+                string openFileDialog = Path.GetFullPath(@"../../resource/effect/overlay.png");
+                configManager.Set("PathEffect", openFileDialog);
+                configManager.SaveConfig();
+            }
         }
 
         public TcpClient client;
